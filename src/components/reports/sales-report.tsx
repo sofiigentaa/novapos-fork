@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { ChevronDown, ChevronRight, DollarSign, FileDown, Package, Receipt, Wallet } from "lucide-react"
 
 import { StatCard } from "@/components/dashboard/page-primitives"
@@ -98,10 +98,9 @@ export default function SalesReport({ data, summary }: SalesReportProps) {
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((group) => (
-                <>
+              data.map((group, indice) => (
+                <Fragment key={`${group.invoiceNumber}-${indice}`}>
                   <TableRow
-                    key={group.invoiceNumber}
                     className="cursor-pointer bg-muted/20 hover:bg-muted/40"
                     onClick={() => toggleGroup(group.invoiceNumber)}
                   >
@@ -166,7 +165,7 @@ export default function SalesReport({ data, summary }: SalesReportProps) {
                       </TableCell>
                     </TableRow>
                   )}
-                </>
+                </Fragment>
               ))
             )}
           </TableBody>
