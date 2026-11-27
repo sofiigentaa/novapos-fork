@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react"
 import { Sidebar } from "@/components/layout/sidebar"
 import { useSession } from "next-auth/react"
+import { GolondrinaAsistente } from "@/components/golondrina/golondrina-asistente"
 
 export default function DashboardLayout({
   children,
@@ -26,6 +27,10 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-background">
       <Suspense fallback={null}>
         <Sidebar userRole={userRole} userName={userName} />
+      </Suspense>
+      {/* Golondrina: asistente que aprende de cada usuario (100% configurable) */}
+      <Suspense fallback={null}>
+        <GolondrinaAsistente usuario={session?.user?.email ?? undefined} />
       </Suspense>
       <main className="lg:pl-64">
         <div className="min-h-screen bg-background/60 px-4 py-4 pt-20 sm:px-6 sm:py-6 sm:pt-24 lg:p-6">
