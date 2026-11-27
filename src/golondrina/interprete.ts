@@ -94,6 +94,7 @@ export function interpretar(
     const parametros: Parametros = {}
     const faltantes: ParametroAccion[] = []
     let bonus = 0
+    let extra = 0
     const consumidas: string[] = []
     for (const param of accion.parametros ?? []) {
       if (param.opciones) {
@@ -101,7 +102,9 @@ export function interpretar(
         if (valor) {
           parametros[param.nombre] = valor
           consumidas.push(valor)
+          // Una opción de varias palabras («Cancha de Pádel Techada») pesa más que una suelta («pádel»).
           bonus += 0.2
+          extra += Math.min(0.05, raices(valor).length * 0.01)
         }
       }
     }
@@ -124,7 +127,7 @@ export function interpretar(
     const soloOpcion = bonus >= 0.2 && base < 0.4 ? 0.45 : 0
     // Si falta un dato obligatorio, otra acción completa debería ganarle.
     const penalizacion = faltantes.length ? 0.7 : 1
-    const puntaje = Math.min(1, (Math.max(base, soloOpcion) + bonus) * penalizacion)
+    const puntaje = Math.min(1, (Math.max(base, soloOpcion) + bonus) * penalizacion) + (faltantes.length ? 0 : extra)
     if (puntaje > 0.2) resultados.push({ accion, parametros, faltantes, puntaje })
   }
 
